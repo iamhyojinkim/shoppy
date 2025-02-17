@@ -10,13 +10,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAukRwfHDyfMEYAArh7HdlWlQ_0T9YLNqM",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "shoppy2-d6520.firebaseapp.com",
-  databaseURL: "https://shoppy2-d6520-default-rtdb.firebaseio.com",
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   projectId: "shoppy2-d6520",
   storageBucket: "shoppy2-d6520.appspot.com",
   messagingSenderId: "147263006183",
-  appId: "1:147263006183:web:f7b529b198be03f5fa0942",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: "G-4LL9ZMCFRP",
 };
 
@@ -24,6 +24,7 @@ const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 const db = getDatabase();
 const dbRef = ref(db);
+console.log(app);
 
 const auth = getAuth();
 
