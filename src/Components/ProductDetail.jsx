@@ -1,37 +1,71 @@
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "./AuthContext";
-import { addOrUpdateCart, login } from "../api/firebase";
-import { useState } from "react";
+import { addOrUpdateCart, login, getCart } from "../api/firebase";
+import { useEffect, useState } from "react";
 
 export default function ProductDetail() {
-  const {
-    user,
-    user: { uid },
-  } = useAuthContext();
+  const { user } = useAuthContext();
+  const uid = user ? user.uid : null;
+  let popupInProgress = false;
 
   const location = useLocation();
   const pdct = location.state || {};
   const [success, setSuccess] = useState("");
   const { id, title, description, price, options, image } = pdct;
   const [selected, setSelected] = useState(options && options[0]);
+  const [cartItems, setCartItems] = useState([]);
 
   const handleSelected = (e) => setSelected(e.target.value);
-  const handleClick = () => {
-    if (!user) login();
-    const product = {
-      id,
-      title,
-      description,
-      price,
-      option: selected,
-      image,
-      quantity: 1,
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const items = await getCart(uid);
+        setCartItems(items);
+      } catch (error) {
+        console.error(error);
+      }
     };
-    addOrUpdateCart(uid, product);
-    setSuccess("SUCCESS!✅");
+    fetchCart();
+  }, []);
+
+  const handleMessages = (msg) => {
+    setSuccess(msg);
     setTimeout(() => {
       setSuccess("");
     }, 2000);
+  };
+
+  const handleClick = async () => {
+    if (popupInProgress) return;
+    popupInProgress = true;
+
+    try {
+      if (!user) {
+        await login();
+      } else {
+        const product = {
+          id,
+          title,
+          description,
+          price,
+          option: selected,
+          image,
+          quantity: 1,
+        };
+        const isInCart = user && cartItems.some((itm) => itm.id === product.id);
+        if (isInCart) {
+          handleMessages("this item is already in your cart😊");
+        } else {
+          addOrUpdateCart(uid, product);
+          handleMessages("SUCCESS!✅");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      popupInProgress = false;
+    }
   };
 
   return (

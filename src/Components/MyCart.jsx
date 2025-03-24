@@ -2,6 +2,7 @@ import { getCart } from "../api/firebase";
 import { useAuthContext } from "./AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import CartItem from "./CartItem";
+import { useNavigate } from "react-router-dom";
 
 export default function MyCart() {
   const {
@@ -15,6 +16,7 @@ export default function MyCart() {
     queryKey: ["carts", uid],
     queryFn: () => getCart(uid),
   });
+  const navigate = useNavigate();
   const hasProducts = products && products.length > 0;
   const totalPrice =
     products &&
@@ -23,6 +25,14 @@ export default function MyCart() {
       0
     );
   const shipping = totalPrice === 0 ? 0 : 3;
+  const handleClick = () => {
+    if (products.length === 0) {
+      return;
+    }
+    navigate("/order", {
+      state: { products, totalPrice, shipping },
+    });
+  };
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
 
@@ -45,10 +55,22 @@ export default function MyCart() {
           Shipping: <span className="text-black font-bold">${shipping}</span>
         </p>
         🟰
-        <p className="text-white bg-brand px-4 py-2 rounded-md shadow-lg">
-          Total Price:{" "}
-          <span className="text-black font-bold">${totalPrice + shipping}</span>
+        <p className="flex text-black">
+          <span className="text-black font-bold">
+            {" "}
+            Total Price: ${totalPrice + shipping}
+          </span>
         </p>
+        <div>
+          <button
+            onClick={handleClick}
+            className="display justify-cente bg-brand text-white font-semibold rounded-md
+                   hover:bg-white hover:text-brand border border-transparent 
+                   hover:border-brand transition"
+          >
+            Order Now
+          </button>
+        </div>
       </div>
     </>
   );

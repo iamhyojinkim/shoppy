@@ -6,6 +6,8 @@ import { useAuthContext } from "./AuthContext";
 
 export default function Navbar() {
   const { user } = useAuthContext();
+  const uid = user?.uid;
+
   return (
     <>
       <header className="flex justify-between border-b border-gray-300 p-3">
@@ -15,13 +17,19 @@ export default function Navbar() {
         </Link>
         <nav className="flex items-center font-bold gap-4 text-gray-500">
           <Link to="/products">Products</Link>
-          <Link to="/carts">Carts</Link>
-          <Link to="/products/new" className="text-2xl">
-            {user?.isAdmin && <IoPencilOutline />}
-          </Link>
-          <span>{user ? `Welcome, ${user.displayName}` : ""}</span>
-          {user && <button onClick={logout}>logout</button>}
-          {!user && <button onClick={login}>login</button>}
+          {user && <Link to="/carts">Cart</Link>}
+          {user?.isAdmin && (
+            <Link to="/products/new" className="text-2xl">
+              <IoPencilOutline />
+            </Link>
+          )}
+          {user && <span>Welcome, {user.displayName}</span>}
+          {uid && <Link to={`/mypage?userId=${uid}`}>MyPage</Link>}
+          {user ? (
+            <button onClick={logout}>logout</button>
+          ) : (
+            <button onClick={login}>login</button>
+          )}
         </nav>
       </header>
     </>
