@@ -234,7 +234,7 @@ const PaymentPage = () => {
                     ${p.price.toFixed(2)}
                   </td>
                   <td className="border border-gray-300 p-2">{p.quantity}</td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="b border-gray-300 p-2">
                     ${(p.price * p.quantity).toFixed(2)}
                   </td>
                 </tr>

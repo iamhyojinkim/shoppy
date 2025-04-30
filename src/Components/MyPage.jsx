@@ -66,7 +66,9 @@ export default function MyPage() {
                           {product.title} ({product.option})
                         </p>
                         <p>Quantity: {product.quantity}</p>
-                        <p className="font-bold">${product.price}</p>
+                        <p className="font-bold">
+                          ${product.price * product.quantity}
+                        </p>
                       </div>
                     </div>
                   ))}

@@ -80,7 +80,7 @@ export default function CartItem({ product }) {
             </div>
 
             <div className="flex items-center mt-4 md:mt-0 space-x-4">
-              <p className="text-lg font-semibold">${price}</p>
+              <p className="text-lg font-semibold">${price * quantity}</p>
               <button
                 onClick={handleRemove}
                 className="text-red-600 hover:text-red-800 transition"
