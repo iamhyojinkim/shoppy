@@ -40,13 +40,16 @@ const PaymentPage = () => {
     };
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND}/api/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
       const data = await response.json();
       const orderNum = data.data.orderNum;
 
