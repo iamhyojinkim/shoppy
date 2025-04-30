@@ -5,7 +5,7 @@ export default function MyPage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/order");
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}`);
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
       }
