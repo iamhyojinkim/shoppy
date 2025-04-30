@@ -41,7 +41,7 @@ const PaymentPage = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}/api/order`,
+        `${process.env.REACT_APP_BACKEND_PROXY}/api/order`,
         {
           method: "POST",
           headers: {
